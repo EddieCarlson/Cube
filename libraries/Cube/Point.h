@@ -32,15 +32,23 @@ class Point {
   // TODO: should new the returned points. (ugh but someone has to free them later. so lame. any way around that?)
   //     could return int and bitshift, but that also sucks
   Point* move(dirs_t dir) {
+    return move(dir, 1);
+  }
+
+  Point* move(dirs_t dir, int amt) {
     switch(dir) {
-      case PX: return new Point(x + 1, y, z); break;
-      case NX: return new Point(x - 1, y, z); break;
-      case PY: return new Point(x, y + 1, z); break;
-      case NY: return new Point(x, y - 1, z); break;
-      case PZ: return new Point(x, y, z + 1); break;
-      case NZ: return new Point(x, y, z - 1); break;
-      default: return new Point(-1, -1, -1);
+      case PX: return new Point(x + amt, y, z); break;
+      case NX: return new Point(x - amt, y, z); break;
+      case PY: return new Point(x, y + amt, z); break;
+      case NY: return new Point(x, y - amt, z); break;
+      case PZ: return new Point(x, y, z + amt); break;
+      case NZ: return new Point(x, y, z - amt); break;
+      default: return new Point(-amt, -amt, -amt);
     }
+  }
+
+  bool equals(Point* p) {
+    return p->x == x && p->y == y && p->z == z;
   }
 
   void move_in_place(dirs_t dir) {
@@ -58,10 +66,17 @@ class Point {
   bool equals(Point o) {
     return x == o.x && y == o.y && z == o.z;
   }
+
+  Point intToColor(int c) {
+    short red = (c << 16) & 0xFF;
+    short green = (c << 8) & 0xFF;
+    short blue = c & 0xFF;
+    return Point(red, green, blue);
+  }
 };
 
-class RainDrop {                                                        
-public:                                                                 
+class RainDrop {
+public:
   Point* point;
   Point* color;
   Point* fadedColor;
@@ -69,27 +84,27 @@ public:
   Point* mostFadedColor;
   int speed;
   int speedLeft;
-  RainDrop(Point* p, Point* c, int s) {                                 
-    point = p;                                                          
+  RainDrop(Point* p, Point* c, int s) {
+    point = p;
     color = c;
     speed = s;
     speedLeft = speed;
     fadedColor = new Point(c->x * 0.1, c->y * 0.1, c->z * 0.1);
     moreFadedColor = new Point(c->x * 0.07, c->y * 0.07, c->z * 0.07);
     mostFadedColor = new Point(c->x * 0.04, c->y * 0.04, c->z * 0.04);
-  } 
+  }
   ~RainDrop() {
     delete point;
     delete color;
     delete fadedColor;
     delete moreFadedColor;
     delete mostFadedColor;
-  }                                                                    
+  }
   void move() {
     speedLeft -= 1;
-    if (speedLeft == 0) {                                               
-      speedLeft = speed;                                                
-      point->move_in_place(NZ);                                         
+    if (speedLeft == 0) {
+      speedLeft = speed;
+      point->move_in_place(NZ);
     }
   }
 };
