@@ -38,7 +38,7 @@ class Rain {
 
   void rain(long maxTime) {
     Point color = Point(250, 50, 0);
-    Point fadedColor = Point(color.x * 0.1, color.y * 0.1, color.z * 0.1);
+    //Point fadedColor = Point(color.x * 0.1, color.y * 0.1, color.z * 0.1);
 
     std::deque<RainDrop *> drops;
     RainDrop* d = randomTopDrop();

@@ -29,7 +29,7 @@ class Sphere {
 
     float t = tt / 3;
     float maxDist = 40;
-    long startT = millis();
+    //long startT = millis();
 
     for(int x = 0; x < xSize; x++) {
       for(int y = 0; y < ySize; y++) {
@@ -59,9 +59,9 @@ class Sphere {
       manhattanSphereRad(&start, &start, t * 2, colorI);
       cube->show();
       colorI = (colorI + 2) % 180;
-      long start = millis();
+      //long start = millis();
       cube->resetPixels();
-      long duration = millis() - start;
+      //long duration = millis() - start;
       t = pow((pow(t, 1.5) + 2), 2.0/3.0);
     }
     delay(710);

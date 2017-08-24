@@ -52,13 +52,17 @@ class Point {
   }
 
   void move_in_place(dirs_t dir) {
+    move_in_place(dir, 1);
+  }
+
+  void move_in_place(dirs_t dir, int amt) {
     switch(dir) {
-      case PX: x += 1; break;
-      case NX: x -= 1; break;
-      case PY: y += 1; break;
-      case NY: y -= 1; break;
-      case PZ: z += 1; break;
-      case NZ: z -= 1; break;
+      case PX: x += amt; break;
+      case NX: x -= amt; break;
+      case PY: y += amt; break;
+      case NY: y -= amt; break;
+      case PZ: z += amt; break;
+      case NZ: z -= amt; break;
       default: return;
     }
   }

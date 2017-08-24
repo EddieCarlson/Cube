@@ -40,7 +40,7 @@ class RainbowFade {
       }
     }
     cube->show();
-    long duration = millis() - curMillis;
+    //long duration = millis() - curMillis;
     colorI = (colorI + 1) % 180;
     delay(3);
   }

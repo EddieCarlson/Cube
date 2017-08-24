@@ -25,7 +25,7 @@ public:
 	void setPixel(const Point *p, Point *c);
 	void setUp(int strandsPerPanel, int startBurn, int bottomBurn, int endBurn);
 	void resetPixels();
-  	void show();
+  void show();
 	int getPixel(int x, int y, int z);
 	bool inCube(int x, int y, int z);
 	bool inCube(Point *p);
