@@ -9,6 +9,7 @@
 #include <RainbowFade.h>
 #include <Rain.h>
 #include <CubeSlide.h>
+#include <ColorWipe.h>
 
 #include <array>
 #include <math.h>
@@ -47,7 +48,7 @@ float rainbowBrightness = 0.17;
 Sphere sphere(cube, rainbow, sphereBrightness);
 RainbowFade rainbowFade(cube, rainbow, rainbowBrightness);
 Rain rain(cube, rainbow);
-CubeSlide *cubeSlide;
+ColorWipe colorWipe(cube, rainbow);
 
 void setup() {
   pinMode(ledPin, OUTPUT);
@@ -75,8 +76,8 @@ void std::__throw_bad_alloc() {
 }
 
 long animationMillis = 0;
-long animationDuration = 5 * 60 * 1000; // 5 minutes
-long extraTime = 1 * 60 * 1000; // 1 minute
+long animationDuration = 4 * 60 * 1000; // 4 minutes
+long extraTime = 30 * 1000; // 30 seconds
 
 int colorI = 0;
 
@@ -115,19 +116,29 @@ void cubeSlideWrapper() {
     blockSize = 6;
     slideSize = 6;
   }
-  cubeSlide = new CubeSlide(cube, rainbow, rainbowBrightness, blockSize, slideSize);
+  CubeSlide* cubeSlide = new CubeSlide(cube, rainbow, rainbowBrightness, blockSize, slideSize);
   animationMillis = millis();
-  long cubeSlideDur = animationDuration - extraTime;
+  long cubeSlideDur = animationDuration;
   while(millis() - animationMillis < cubeSlideDur) {
     cubeSlide->move();
   }
   cubeSlideMode = (cubeSlideMode + 1) % 3;
+  delete cubeSlide;
+}
+
+void colorWipeWrapper() {
+  animationMillis = millis();
+  long colorWipeDur = animationMillis - extraTime - extraTime;
+  while(millis() - animationMillis < colorWipeDur) {
+    colorWipe.colorWipe();
+  }
 }
 
 
 void loop() {
   rainbowFadeWrapper();
   sphereWrapper();
-  rainWrapper();
   cubeSlideWrapper();
+  rainWrapper();
+  colorWipeWrapper();
 }

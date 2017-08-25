@@ -13,6 +13,10 @@ class CubeDef {
     color = c;
   }
 
+  ~CubeDef() {
+    delete point;
+  }
+
 };
 
 /* 0 - matrix green
@@ -105,6 +109,14 @@ class CubeSlide {
     cubeBases[6] = new CubeDef(new Point(slideSize, slideSize, 0), dimInt(rainbow[122], 0.2));
     // mint
     cubeBases[7] = new CubeDef(new Point(slideSize, slideSize, slideSize), dimInt(rainbow[163], 0.2));
+  }
+
+  ~CubeSlide() {
+    for (int i = 0; i < 8; i++) {
+      if (cubeBases[i]) {
+        delete cubeBases[i];
+      }
+    }
   }
 
   bool moveIfUnblocked(Point* p, bool requireInside) {
