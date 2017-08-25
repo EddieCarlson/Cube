@@ -76,8 +76,8 @@ void std::__throw_bad_alloc() {
 }
 
 long animationMillis = 0;
-long animationDuration = 1 * 60 * 1000; // 4 minutes
-long extraTime = 15 * 1000; // 30 seconds
+long animationDuration = 4 * 60 * 1000; // 4 minutes
+long extraTime = 40 * 1000; // 40 seconds
 
 int colorI = 0;
 
