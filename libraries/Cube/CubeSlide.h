@@ -66,31 +66,45 @@ class CubeSlide {
   float brightness;
   CubeDef* cubeBases[8];
   int lastMovedIndex;
-  int maxDelay = 45;
-  int minDelay = 18;
-  int delayTime = 30;
-  bool delayUp = true;
-  int blockSize = 6;
-  int slideSize = 6;
+  int blockSize;
+  int slideSize;
+  bool delayUp = false;
+  int maxDelay;
+  int minDelay;
+  int delayTime;
+  unsigned long lastRateChange = millis();
 
-  CubeSlide(Cube* _cube, int* _rainbow, float _brightness, int _blockSize) {
+  CubeSlide(Cube* _cube, int* _rainbow, float _brightness, int _blockSize, int _slideSize) {
     cube = _cube;
     rainbow = _rainbow;
     brightness = _brightness;
     xSize = cube->xSize;
     ySize = cube->ySize;
     zSize = cube->zSize;
+    blockSize = _blockSize;
+    slideSize = _slideSize;
+    maxDelay = floor(44.0 * (6.0 / slideSize));
+    minDelay = floor(20.0 * (6.0 / slideSize));
+    delayTime = maxDelay;
     int lastMovedIndex = 0;
 
     // sliderSize = 5
-    cubeBases[0] = new CubeDef(new Point(0, 0, 0), dimInt(rainbow[7], 0.2));
-    cubeBases[1] = new CubeDef(new Point(0, 0, slideSize), dimInt(rainbow[28], 0.2));
+    // green
+    cubeBases[0] = new CubeDef(new Point(0, 0, 0), dimInt(rainbow[5], 0.2));
+    // yellow
+    cubeBases[1] = new CubeDef(new Point(0, 0, slideSize), dimInt(rainbow[26], 0.2));
+    // orange
     cubeBases[2] = new CubeDef(new Point(0, slideSize, 0), dimInt(rainbow[50], 0.2));
-    cubeBases[3] = new CubeDef(new Point(0, slideSize, slideSize), dimInt(rainbow[67], 0.2));
-    cubeBases[4] = new CubeDef(new Point(slideSize, 0, 0), dimInt(rainbow[85], 0.2));
-    cubeBases[5] = new CubeDef(new Point(slideSize, 0, slideSize), dimInt(rainbow[100], 0.2));
-    cubeBases[6] = new CubeDef(new Point(slideSize, slideSize, 0), dimInt(rainbow[125], 0.2));
-    cubeBases[7] = new CubeDef(new Point(slideSize, slideSize, slideSize), dimInt(rainbow[160], 0.2));
+    // neon pink
+    cubeBases[3] = new CubeDef(new Point(0, slideSize, slideSize), dimInt(rainbow[66], 0.2));
+    // pink/purple
+    cubeBases[4] = new CubeDef(new Point(slideSize, 0, 0), dimInt(rainbow[81], 0.2));
+    // violet
+    cubeBases[5] = new CubeDef(new Point(slideSize, 0, slideSize), dimInt(rainbow[105], 0.2));
+    // blue
+    cubeBases[6] = new CubeDef(new Point(slideSize, slideSize, 0), dimInt(rainbow[122], 0.2));
+    // mint
+    cubeBases[7] = new CubeDef(new Point(slideSize, slideSize, slideSize), dimInt(rainbow[163], 0.2));
   }
 
   bool moveIfUnblocked(Point* p, bool requireInside) {
@@ -144,25 +158,26 @@ class CubeSlide {
     if (blocked && cube->inCube(p)) {
       blocked = moveIfUnblocked(p, false);
     }
-    /*
-    bool blocked = true;
-    displayCubes();
-    delay(delayTime);
-    */
     if (!blocked) {
       delay(delayTime);
-      if (rand() % 3 == 0) {
-        if (delayTime == maxDelay) {
-          delayUp = false;
-        } else if (delayTime == minDelay) {
-          delayUp = true;
-        }
-        if (delayUp) {
-          delayTime += 1;
-        } else {
-          delayTime -= 1;
-        }
+      if (millis() - lastRateChange > 1750 && rand() % 2 == 0) {
+        updateDelayTime();
       }
+    }
+  }
+
+  void updateDelayTime() {
+    if (delayTime == maxDelay) {
+      delayUp = false;
+    } else if (delayTime == minDelay) {
+      delayUp = true;
+    } else if (rand() % 25 == 0) { // reverse directions 1 in every 25 times
+      delayUp = !delayUp;
+    }
+    if (delayUp) {
+      delayTime += 1;
+    } else {
+      delayTime -= 1;
     }
   }
 

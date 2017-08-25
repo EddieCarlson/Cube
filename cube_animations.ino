@@ -56,7 +56,6 @@ void setup() {
   delay(1000);
   setupRainbow(rainbow);
   cube->setUp(strandsPerPanel, startBurn, bottomBurn, endBurn);
-  cubeSlide = new CubeSlide(cube, rainbow, rainbowBrightness, 5);
 }
 
 void std::__throw_out_of_range(char const*) {
@@ -77,13 +76,13 @@ void std::__throw_bad_alloc() {
 
 long animationMillis = 0;
 long animationDuration = 5 * 60 * 1000; // 5 minutes
-long extraRainbow = 0;
+long extraTime = 1 * 60 * 1000; // 1 minute
 
 int colorI = 0;
-/*
+
 void rainbowFadeWrapper() {
   animationMillis = millis();
-  long rainbowDur = animationDuration + extraRainbow;
+  long rainbowDur = animationDuration + extraTime;
   while(millis() - animationMillis < rainbowDur) {
     rainbowFade.rainbowFade();
   }
@@ -100,22 +99,35 @@ void sphereWrapper() {
 void rainWrapper() {
   rain.rain(millis() + animationDuration);
 }
-*/
+
+int cubeSlideMode = 0;
 
 void cubeSlideWrapper() {
-  animationMillis = millis();
-  //while(millis() - animationMillis < animationDuration) {
-  int count = 0;
-  while(true) {
-    cubeSlide->move();
-    count += 1;
+  int blockSize;
+  int slideSize;
+  if (cubeSlideMode == 0) {
+    blockSize = 5;
+    slideSize = 7;
+  } else if (cubeSlideMode == 2) {
+    blockSize = 4;
+    slideSize = 8;
+  } else {
+    blockSize = 6;
+    slideSize = 6;
   }
+  cubeSlide = new CubeSlide(cube, rainbow, rainbowBrightness, blockSize, slideSize);
+  animationMillis = millis();
+  long cubeSlideDur = animationDuration - extraTime;
+  while(millis() - animationMillis < cubeSlideDur) {
+    cubeSlide->move();
+  }
+  cubeSlideMode = (cubeSlideMode + 1) % 3;
 }
 
-void loop() {
 
-//  rainbowFadeWrapper();
-//  sphereWrapper();
-//  rainWrapper();
+void loop() {
+  rainbowFadeWrapper();
+  sphereWrapper();
+  rainWrapper();
   cubeSlideWrapper();
 }
