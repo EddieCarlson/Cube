@@ -118,7 +118,7 @@ void cubeSlideWrapper() {
   }
   CubeSlide* cubeSlide = new CubeSlide(cube, rainbow, rainbowBrightness, blockSize, slideSize);
   animationMillis = millis();
-  long cubeSlideDur = animationDuration;
+  long cubeSlideDur = animationDuration - extraTime;
   while(millis() - animationMillis < cubeSlideDur) {
     cubeSlide->move();
   }
