@@ -106,7 +106,7 @@ int ColorWipe::newDir() {
 }
 
 void ColorWipe::colorWipe() {
-  colorWipeIndex = (colorWipeIndex + 60 + (rand() % 60)) % 180;
+  colorWipeIndex = (colorWipeIndex + 50 + (rand() % 80)) % 180;
   Point* p = new Point(dimInt(rainbow[colorWipeIndex], 0.17));
   int nDir = newDir();
   switch(nDir) {
